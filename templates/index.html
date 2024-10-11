@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube to MP3 Converter dindaaadit</title>
+    <link rel="icon" href="images/favicon.png" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background-color: #f4f4f4; 
+        }
+        .container {
+            text-align: center; 
+            background-color: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+        }
+        input[type="text"] {
+            width: 300px; 
+            padding: 10px; 
+            margin-right: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+        }
+        button {
+            padding: 10px 15px; 
+            border: none; 
+            border-radius: 5px; 
+            background-color: #28a745; 
+            color: white; 
+            cursor: pointer; 
+            transition: background-color 0.3s; 
+        }
+        button:hover {
+            background-color: #218838; 
+        }
+        #result {
+            margin-top: 20px; 
+        }
+        #loading {
+            margin-top: 20px; 
+            font-weight: bold; 
+            color: #007bff; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube to MP3 Converter</h1>
+        <h3>by Mas Adit for dedee dindaa</h3>
+        <input type="text" id="youtube-url" placeholder="Masukkan URL YouTube">
+        <button onclick="convertToMp3()">Convert to MP3</button>
+        <div id="loading" style="display:none;">Loading... Lagi Proses Convert Beb...</div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function convertToMp3() {
+            const url = document.getElementById("youtube-url").value;
+            const loadingDiv = document.getElementById("loading");
+            loadingDiv.style.display = "block"; // Menampilkan pesan loading
+
+            fetch('/convert', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById("result");
+                loadingDiv.style.display = "none"; // Menyembunyikan pesan loading
+                if (data.success) {
+                    resultDiv.innerHTML = `<p>File MP3 siap diunduh: <a href="/download/${data.file}" download>Download MP3</a></p>`;
+                } else {
+                    resultDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
